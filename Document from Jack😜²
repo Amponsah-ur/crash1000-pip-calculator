@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pip Calculator - Crash 1000 Index</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff9800;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        input {
+            background: #333;
+            color: #fff;
+            outline: none;
+        }
+        button {
+            background: #ff9800;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #e68900;
+            transform: scale(1.05);
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: #222;
+            border-radius: 8px;
+            font-size: 16px;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        .profit {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        .loss {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+                width: 100%;
+                max-width: none;
+                margin: 0 auto;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            input, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .result {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Crash 1000 Index Pip Calculator</h2>
+        <label>Lot Size (min 0.2):</label>
+        <input type="number" id="lotSize" step="0.1" min="0.2" value="0.2">
+        <label>Entry Price:</label>
+        <input type="number" id="entryPrice" step="0.1">
+        <label>Exit Price:</label>
+        <input type="number" id="exitPrice" step="0.1">
+        <label>Stop Loss (SL) Price:</label>
+        <input type="number" id="slPrice" step="0.1">
+        <label>Take Profit (TP) Price:</label>
+        <input type="number" id="tpPrice" step="0.1">
+        <button onclick="calculatePips()">Calculate</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        function calculatePips() {
+            let lotSize = parseFloat(document.getElementById('lotSize').value);
+            let entry = parseFloat(document.getElementById('entryPrice').value);
+            let exit = parseFloat(document.getElementById('exitPrice').value);
+            let sl = parseFloat(document.getElementById('slPrice').value);
+            let tp = parseFloat(document.getElementById('tpPrice').value);
+            
+            let pipsMoved = Math.abs(exit - entry); 
+            let pipValue = (lotSize / 0.2) * (1 / 5) * pipsMoved; 
+            let slPips = Math.abs(entry - sl);
+            let tpPips = Math.abs(entry - tp);
+            let riskReward = (tpPips / slPips).toFixed(2);
+            
+            let winAmount = (tpPips / 5) * (lotSize / 0.2); 
+            let lossAmount = (slPips / 5) * (lotSize / 0.2); 
+            
+            let resultText = `<p>Pips Moved: ${pipsMoved.toFixed(1)}</p>` +
+                             `<p class="profit">Potential Profit: $${winAmount.toFixed(2)}</p>` +
+                             `<p class="loss">Potential Loss: $${lossAmount.toFixed(2)}</p>` +
+                             `<p>Stop-Loss Pips: ${slPips.toFixed(1)}</p>` +
+                             `<p>Take-Profit Pips: ${tpPips.toFixed(1)}</p>` +
+                             `<p>Risk-Reward Ratio: ${riskReward}:1</p>`;
+            
+            document.getElementById('result').innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
